@@ -2,7 +2,7 @@
 
 ## requirements
 
-- The Data-Driven Ontology Toolkit (DDOT) - https://github.com/idekerlab/ddot
+- The Data-Driven Ontology Toolkit (DDOT) - https://github.com/Fuzzwah/ddot.git
 - NetColoc - https://github.com/ucsd-ccbb/NetColoc
 
 ## setup

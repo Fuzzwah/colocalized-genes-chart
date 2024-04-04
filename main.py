@@ -84,14 +84,13 @@ G_int = ndex2.create_nice_cx_from_server(
             password=ndex_password,
             uuid=interactome_uuid
         ).to_networkx()
-nodes = list(G_int.nodes)
 
 # remove self edges from network
 G_int.remove_edges_from(nx.selfloop_edges(G_int))
 
 # print out the numbers of nodes and edges in the interatome for diagnostic purposes:
 print('Number of nodes:', len(G_int.nodes))
-print('\nNumber of edges:', len(G_int.edges))
+print('Number of edges:', len(G_int.edges))
 
 int_nodes = list(G_int.nodes)
 
@@ -104,7 +103,7 @@ w_double_prime = netprop.get_individual_heats_matrix(w_prime, .5)
 
 # subset seed genes to those found in interactome
 print("Number of D1 genes:", len(D1_genes))
-D1_genes = list(np.intersect1d(D1_genes,int_nodes))
+D1_genes = list(np.intersect1d(D1_genes, int_nodes))
 print("Number of D1 genes in interactome:", len(D1_genes))
 
 # D1 network propagation
@@ -141,6 +140,7 @@ node_df.head(15)
 
 print("Nodes in overlap subgraph:", len(G_prox.nodes()))
 print("Edges in overlap subgraph:", len(G_prox.edges()))
+
 # Create cx format of overlap subgraph
 G_prox_cx = ndex2.create_nice_cx_from_networkx(G_prox)
 G_prox_cx.set_name(d1_name+'_NetColoc_subgraph')
@@ -162,16 +162,13 @@ G_hier = cd.run_community_detection(G_prox_cx, algorithm='hidefv1.1beta',argumen
 
 # Print information about hierarchy
 print('Hierarchy name: ' + str(G_hier.get_name()))
-print('# nodes: ' + str(len(G_hier.get_nodes())))
-print('# edges: ' + str(len(G_hier.get_edges())))
 
 G_hier = G_hier.to_networkx(mode='default')
-
 nodes = G_hier.nodes()
 
 # print the number of nodes and edges in the hierarchy for diagnostic purposes
 print('Number of nodes:', len(G_hier.nodes()))
-print('\nNumber of edges:', len(G_hier.edges()))
+print('Number of edges:', len(G_hier.edges()))
 
 # add node attributes to dataframe for easier access
 hier_df = pd.DataFrame.from_dict(dict(G_hier.nodes(data=True)), orient='index')
@@ -224,8 +221,6 @@ print("Number of edges remaining:", len(G_hier.edges()))
 system_name_list = []
 for p in hier_df.index.tolist():
     focal_genes=hier_df['CD_MemberList'].loc[p].split(' ')
-    print(p)
-    print(len(focal_genes))
     if len(focal_genes)>2:
         gp_temp = pd.DataFrame(gp.profile(focal_genes,significance_threshold_method='fdr',
                                                sources=['REAC']))
@@ -278,7 +273,6 @@ def load_MPO(url='http://www.informatics.jax.org/downloads/reports/MPheno_OBO.on
                           names=['MP','description'],index_col='MP')
 
     MP2desc=MP2desc.loc[MP2desc.index.dropna()] # drop NAN from index
-    print(len(MP2desc))
 
     hierarchy = pd.read_table('parsed_mp.txt',
                               sep='\t',
@@ -346,7 +340,6 @@ neg_ctrl_terms_plot=['MP:0002419']
 
 terms_plot = brain_terms_plot +neg_ctrl_terms_plot
 
-
 plt.figure(figsize=(3,6))
 
 plt.errorbar(root_KO_df.loc[terms_plot]['log_OR'],np.arange(len(terms_plot)),
@@ -369,3 +362,4 @@ plt.ylim([-0.8,len(terms_plot)-.5])
 
 plt.gca().invert_yaxis()
 
+plt.show()
