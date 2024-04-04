@@ -26,3 +26,7 @@ cd ..
 ## running
 
 Drop your list of genes into the `input` directory, then run `python main.py`. You'll be prompted with a list of the files in the `input` directory, select the one you'd like to process.
+
+## example output
+
+![image](https://github.com/Fuzzwah/colocalized-genes-chart/assets/658935/36f9947a-b493-47f9-a6d2-b82ee6679b6a)
