@@ -89,22 +89,19 @@ G_int = ndex2.create_nice_cx_from_server(
 G_int.remove_edges_from(nx.selfloop_edges(G_int))
 
 # print out the numbers of nodes and edges in the interatome for diagnostic purposes:
-print('Number of nodes:', len(G_int.nodes))
-print('Number of edges:', len(G_int.edges))
+print('\nNumber of nodes in interatome:', len(G_int.nodes))
+print('Number of edges in interatome:', len(G_int.edges))
 
 int_nodes = list(G_int.nodes)
 
 # pre-calculate matrices used for network propagation. this step takes a few minutes, more for denser interactomes
-print('\ncalculating w_prime')
 w_prime = netprop.get_normalized_adjacency_matrix(G_int, conserve_heat=True)
-
-print('\ncalculating w_double_prime')
 w_double_prime = netprop.get_individual_heats_matrix(w_prime, .5)
 
 # subset seed genes to those found in interactome
-print("Number of D1 genes:", len(D1_genes))
+print(f"\nNumber of genes in {d1_name}: {len(D1_genes)}")
 D1_genes = list(np.intersect1d(D1_genes, int_nodes))
-print("Number of D1 genes in interactome:", len(D1_genes))
+print(f"Number of genes in {d1_name} that intersect with interatome: {len(D1_genes)}")
 
 # D1 network propagation
 print('\nCalculating D1 z-scores: ')
@@ -123,7 +120,7 @@ zthresh=3 # default = 3
 # select the genes in the network intersection, make a subgraph
 
 G_prox = nx.subgraph(G_int,z_D1[z_D1['z']>zthresh].index.tolist())
-print("Nodes in proximal subgraph:", len(G_prox.nodes()))
+print("\nNodes in proximal subgraph:", len(G_prox.nodes()))
 print("Edges in proximal subgraph:", len(G_prox.edges()))
 
 G_cosSim=network_colocalization.transform_edges(G_prox,method='cosine_sim',edge_weight_threshold=0.95)
@@ -138,7 +135,7 @@ node_df['sum_seeds']=node_df['d1_seeds']
 node_df = node_df.sort_values('z_d1',ascending=False)
 node_df.head(15)
 
-print("Nodes in overlap subgraph:", len(G_prox.nodes()))
+print("\nNodes in overlap subgraph:", len(G_prox.nodes()))
 print("Edges in overlap subgraph:", len(G_prox.edges()))
 
 # Create cx format of overlap subgraph
@@ -161,7 +158,7 @@ cd = cdapsutil.CommunityDetection()
 G_hier = cd.run_community_detection(G_prox_cx, algorithm='hidefv1.1beta',arguments={'--maxres':'20'})
 
 # Print information about hierarchy
-print('Hierarchy name: ' + str(G_hier.get_name()))
+print('\nHierarchy name: ' + str(G_hier.get_name()))
 
 G_hier = G_hier.to_networkx(mode='default')
 nodes = G_hier.nodes()
@@ -317,8 +314,7 @@ print("\n".join([mp+" - "+get_MP_description(mp) for mp in MP_focal_brain_list[0
 # add a negative control phenotype: abnormal innate immunity: MP:0002419
 # negative controls are tough here because we're dealing with development, which impacts almost everything.
 MP_focal_list = ['MP:0002419']+MP_focal_brain_list
-root_KO_brain_df=validation.MPO_enrichment_root(hier_df,MPO,mgi_df,MP_focal_list,G_int,verbose=True)
-
+root_KO_brain_df=validation.MPO_enrichment_root(hier_df,MPO,mgi_df,MP_focal_list,G_int,verbose=False)
 
 root_KO_brain_df.head()
 
@@ -330,7 +326,6 @@ root_KO_df = root_KO_df.sort_values('OR_p')
 root_KO_df.head()
 root_KO_df['MPO_term_type'].value_counts()
 
-
 # plot top performing brain and heart terms + negative control term (MP:0002419) (for terms which have at least 150 genes)
 
 brain_terms_plot = root_KO_brain_df[root_KO_brain_df['num_genes_in_term']>150]
@@ -340,7 +335,7 @@ neg_ctrl_terms_plot=['MP:0002419']
 
 terms_plot = brain_terms_plot +neg_ctrl_terms_plot
 
-plt.figure(figsize=(3,6))
+plt.figure(figsize=(8,6))
 
 plt.errorbar(root_KO_df.loc[terms_plot]['log_OR'],np.arange(len(terms_plot)),
             xerr=[np.subtract(root_KO_df.loc[terms_plot]['log_OR'],root_KO_df.loc[terms_plot]['log_OR_CI_lower']),
