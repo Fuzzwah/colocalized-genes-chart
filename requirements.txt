@@ -1,0 +1,9 @@
+networkx==2
+cdapsutil
+scipy
+pandas
+requests
+requests-toolbelt
+ijson
+netcoloc
+rich
