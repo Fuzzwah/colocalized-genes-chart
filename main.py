@@ -9,8 +9,6 @@ import re
 import random
 from rich.prompt import Prompt
 
-from IPython.display import display
-
 import getpass
 import ndex2
 
