@@ -8,6 +8,7 @@ import pandas as pd
 import re
 import random
 from rich.prompt import Prompt
+import requests
 
 import getpass
 import ndex2
@@ -42,6 +43,7 @@ import sys
 
 # verify DDOT was installed
 import ddot
+from ddot import Ontology
 
 from netcoloc import netprop_zscore, netprop, network_colocalization, validation
 
@@ -251,7 +253,53 @@ for p in hier_df.index.tolist():
 mgi_df = validation.load_MGI_mouseKO_data()
 mgi_df.head()
 
-MPO = validation.load_MPO()
+def load_MPO(url='http://www.informatics.jax.org/downloads/reports/MPheno_OBO.ontology'):
+    """
+    Function to parse and load mouse phenotype ontology, using DDOT's ontology module
+
+    :param url: URL containing MPO ontology file
+    :type url: str
+    :return: MPO parsed using DDOT
+    :rtype: :py:class:`ddot.Ontology`
+    :raises ImportError: If DDOT package is not found
+    """
+
+    # download the mammalian phenotype ontology, parse with ddot
+    r = requests.get(url,allow_redirects=True)
+    open('MPheno_OBO.ontology','wb').write(r.content)
+    ddot.parse_obo('MPheno_OBO.ontology',
+                   'parsed_mp.txt',
+                  'id2name_mp.txt',
+                  'id2namespace_mp.txt',
+                  'altID_mp.txt')
+
+
+    MP2desc = pd.read_csv('id2name_mp.txt',sep='\t',
+                          names=['MP','description'],index_col='MP')
+
+    MP2desc=MP2desc.loc[MP2desc.index.dropna()] # drop NAN from index
+    print(len(MP2desc))
+
+    hierarchy = pd.read_table('parsed_mp.txt',
+                              sep='\t',
+                              header=None,
+                              names=['Parent', 'Child', 'Relation', 'Namespace'])
+
+    MPO = Ontology.from_table(
+        table=hierarchy,
+        parent='Parent',
+        child='Child',
+        add_root_name='MP:00SUPER',
+        ignore_orphan_terms=True)
+
+    # add description to node attribute
+    terms_keep = list(np.unique(hierarchy['Parent'].tolist()+hierarchy['Child'].tolist()))
+    MPO.node_attr=MP2desc.loc[terms_keep]
+
+    return MPO
+
+
+MPO = load_MPO()
 
 def get_MP_description(term_id, ontology=MPO):
     return ontology.node_attr.loc[term_id, "description"]
