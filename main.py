@@ -30,6 +30,7 @@ mpl.rc('font', family = 'serif')
 from matplotlib import rcParams
 rcParams['font.family'] = 'sans-serif'
 rcParams['font.sans-serif'] = ['Arial']
+rcParams.update({'figure.autolayout': True})
 
 sns.set(font_scale=1.4)
 
@@ -104,7 +105,7 @@ D1_genes = list(np.intersect1d(D1_genes, int_nodes))
 print(f"Number of genes in {d1_name} that intersect with interatome: {len(D1_genes)}")
 
 # D1 network propagation
-print('\nCalculating D1 z-scores: ')
+print(f"\nCalculating {d1_name} z-scores: ")
 z_D1, Fnew_D1, Fnew_rand_D1 = netprop_zscore.calculate_heat_zscores(w_double_prime, int_nodes,
                                                                     dict(G_int.degree),
                                                                     D1_genes, num_reps=1000,
