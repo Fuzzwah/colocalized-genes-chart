@@ -2,12 +2,12 @@
 
 ## requirements
 
-The Data-Driven Ontology Toolkit (DDOT) - https://github.com/idekerlab/ddot
-NetColoc - https://github.com/ucsd-ccbb/NetColoc
+- The Data-Driven Ontology Toolkit (DDOT) - https://github.com/idekerlab/ddot
+- NetColoc - https://github.com/ucsd-ccbb/NetColoc
 
 ## setup
 
-DDOT depends on Python libs that need Python <=3.9
+Note: DDOT depends on Python libs that need Python <=3.9
 
 ```
 git clone https://github.com/Fuzzwah/colocalized-genes-chart.git
@@ -25,4 +25,4 @@ cd ..
 
 ## running
 
-Drop your list of genes into the `input` directory, then run `python main.py`. You'll be prompted with a list of the files in the `input` directory, select the one you'd like to process
+Drop your list of genes into the `input` directory, then run `python main.py`. You'll be prompted with a list of the files in the `input` directory, select the one you'd like to process.
