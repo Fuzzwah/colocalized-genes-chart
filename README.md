@@ -3,7 +3,7 @@
 ## requirements
 
 - The Data-Driven Ontology Toolkit (DDOT) - https://github.com/Fuzzwah/ddot.git
-- NetColoc - https://github.com/ucsd-ccbb/NetColoc
+- NetColoc - https://github.com/fuzzwah/NetColoc
 
 ## setup
 
