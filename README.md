@@ -7,16 +7,16 @@
 
 ## setup
 
-Note: DDOT depends on Python libs that need Python <=3.9
+Note: DDOT depends on Python libs that need Python <=3.8
 
 ```
 git clone https://github.com/Fuzzwah/colocalized-genes-chart.git
 cd colocalized-genes-chart
-python3.9 -m venv .env
+python3.8 -m venv .env
 . .env/bin/activate
 pip install -U pip
 pip install -r requirements.txt
-git clone --branch python3 https://github.com/idekerlab/ddot.git
+git clone https://github.com/Fuzzwah/ddot.git
 cd ddot
 python setup.py build
 python setup.py install
